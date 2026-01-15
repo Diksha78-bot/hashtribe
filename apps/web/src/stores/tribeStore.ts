@@ -66,7 +66,7 @@ export const useTribeStore = create<TribeState>((set, get) => ({
         }
     },
 
-    fetchTribeBySlug: async (slug, userId) => {
+    fetchTribeBySlug: async (slug) => {
         set({ loading: true });
         try {
             const { data: tribe, error } = await supabase

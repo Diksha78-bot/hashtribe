@@ -130,7 +130,7 @@ export const usePostStore = create<PostStore>((set, get) => ({
 
     createPost: async (tribeId, userId, content, imageUrls = []) => {
         try {
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('posts')
                 .insert({
                     tribe_id: tribeId,
