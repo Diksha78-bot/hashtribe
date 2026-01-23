@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/authStore';
 import { Layout } from './components/Layout';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -33,133 +33,131 @@ function App() {
     }
 
     return (
-        <BrowserRouter>
-            <Routes>
-                {/* Public Routes */}
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignupPage />} />
-                <Route path="/auth/callback" element={<AuthCallbackPage />} />
+        <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-                {/* Protected Routes */}
-                <Route
-                    path="/"
-                    element={<Navigate to="/feed" replace />}
-                />
-                <Route
-                    path="/feed"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <HomePage />
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/tribes"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <TribesPage />
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/tribes/create"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <CreateTribePage />
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/tribes/:slug"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <TribeDetailPage />
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/tribes/topics/:topicId"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <TopicDetailPage />
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
+            {/* Redirect */}
+            <Route path="/" element={<Navigate to="/feed" replace />} />
 
-                <Route
-                    path="/competitions"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <CompetitionsPage />
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/competitions/:slug"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <CompetitionDetailPage />
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/leaderboard"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <div className="card text-center py-12">
-                                    <h1 className="text-3xl font-bold text-white mb-4">Leaderboard</h1>
-                                    <p className="text-dark-400">Coming soon in Phase 1!</p>
-                                </div>
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/profile/:username"
-                    element={
-                        <ProtectedRoute>
-                            <Layout>
-                                <div className="card text-center py-12">
-                                    <h1 className="text-3xl font-bold text-white mb-4">Profile</h1>
-                                    <p className="text-dark-400">Coming soon in Phase 1!</p>
-                                </div>
-                            </Layout>
-                        </ProtectedRoute>
-                    }
-                />
+            {/* Protected Routes */}
+            <Route
+                path="/feed"
+                element={
+                    <ProtectedRoute>
+                        <Layout>
+                            <HomePage />
+                        </Layout>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/tribes"
+                element={
+                    <ProtectedRoute>
+                        <Layout>
+                            <TribesPage />
+                        </Layout>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/tribes/create"
+                element={
+                    <ProtectedRoute>
+                        <Layout>
+                            <CreateTribePage />
+                        </Layout>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/tribes/:slug"
+                element={
+                    <ProtectedRoute>
+                        <Layout>
+                            <TribeDetailPage />
+                        </Layout>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/tribes/topics/:topicId"
+                element={
+                    <ProtectedRoute>
+                        <Layout>
+                            <TopicDetailPage />
+                        </Layout>
+                    </ProtectedRoute>
+                }
+            />
 
-                {/* 404 */}
-                <Route
-                    path="*"
-                    element={
+            <Route
+                path="/competitions"
+                element={
+                    <ProtectedRoute>
+                        <Layout>
+                            <CompetitionsPage />
+                        </Layout>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/competitions/:slug"
+                element={
+                    <ProtectedRoute>
+                        <Layout>
+                            <CompetitionDetailPage />
+                        </Layout>
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/leaderboard"
+                element={
+                    <ProtectedRoute>
                         <Layout>
                             <div className="card text-center py-12">
-                                <h1 className="text-4xl font-bold text-white mb-4">404</h1>
-                                <p className="text-dark-400 mb-6">Page not found</p>
-                                <a href="/feed" className="btn-primary">
-                                    Go to Feed
-                                </a>
+                                <h1 className="text-3xl font-bold text-white mb-4">Leaderboard</h1>
+                                <p className="text-dark-400">Coming soon in Phase 1!</p>
                             </div>
                         </Layout>
-                    }
-                />
-            </Routes>
-        </BrowserRouter>
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/profile/:username"
+                element={
+                    <ProtectedRoute>
+                        <Layout>
+                            <div className="card text-center py-12">
+                                <h1 className="text-3xl font-bold text-white mb-4">Profile</h1>
+                                <p className="text-dark-400">Coming soon in Phase 1!</p>
+                            </div>
+                        </Layout>
+                    </ProtectedRoute>
+                }
+            />
+
+            {/* 404 */}
+            <Route
+                path="*"
+                element={
+                    <Layout>
+                        <div className="card text-center py-12">
+                            <h1 className="text-4xl font-bold text-white mb-4">404</h1>
+                            <p className="text-dark-400 mb-6">Page not found</p>
+                            <a href="/feed" className="btn-primary">
+                                Go to Feed
+                            </a>
+                        </div>
+                    </Layout>
+                }
+            />
+        </Routes>
     );
 }
 
