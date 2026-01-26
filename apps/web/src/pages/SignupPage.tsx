@@ -8,7 +8,7 @@ import { Globe } from '@/components/Globe';
 import logoDark from '@/components/assets/logo_dark.png';
 import googleIcon from '@/components/assets/playstore.svg';
 import nfksIcon from '@/components/assets/nfks_logo.png';
-import { ShieldCheck, ShieldAlert, ShieldX } from 'lucide-react';
+
 
 export function SignupPage() {
     const { user, signInWithGitHub, signUpWithEmail, loading } = useAuthStore();

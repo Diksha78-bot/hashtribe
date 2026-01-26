@@ -136,7 +136,7 @@ export function TribesPage() {
               key={tribe.id}
               tribe={tribe}
               onJoinLeave={handleJoinLeave}
-              disabled={loading}
+              disabled={loading || actionLoading === tribe.id}
             />
           ))}
 
