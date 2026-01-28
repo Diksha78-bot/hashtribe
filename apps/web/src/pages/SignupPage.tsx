@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
@@ -6,6 +8,7 @@ import { Globe } from '@/components/Globe';
 import logoDark from '@/components/assets/logo_dark.png';
 import googleIcon from '@/components/assets/playstore.svg';
 import nfksIcon from '@/components/assets/nfks_logo.png';
+
 
 export function SignupPage() {
     const { user, signInWithGitHub, signUpWithEmail, loading } = useAuthStore();
@@ -19,6 +22,10 @@ export function SignupPage() {
     const [signupLoading, setSignupLoading] = useState(false);
     const [error, setError] = useState('');
 
+    // Password Strength State
+    const [strength, setStrength] = useState(0);
+    const [strengthLabel, setStrengthLabel] = useState('');
+
     const from = (location.state as any)?.from?.pathname || '/tribes';
 
     useEffect(() => {
@@ -26,6 +33,26 @@ export function SignupPage() {
             navigate(from, { replace: true });
         }
     }, [user, loading, navigate, from]);
+
+    // Password strength calculation logic
+    useEffect(() => {
+        let score = 0;
+        if (!password) {
+            setStrength(0);
+            setStrengthLabel('');
+            return;
+        }
+
+        if (password.length >= 8) score += 1;
+        if (/[A-Z]/.test(password)) score += 1;
+        if (/[0-9]/.test(password)) score += 1;
+        if (/[^A-Za-z0-9]/.test(password)) score += 1;
+
+        setStrength(score);
+
+        const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+        setStrengthLabel(labels[score - 1] || 'Weak');
+    }, [password]);
 
     const handleGitHubLogin = async () => {
         try {
@@ -46,11 +73,8 @@ export function SignupPage() {
             await signUpWithEmail(email, password, username, name);
             setSignupLoading(false);
 
-            // If not automatically redirected by useEffect (meaning no session yet), 
-            // it means email confirmation is required.
             if (!user) {
                 setError('Account created! Please check your email to verify your account.');
-                // clear form?
                 setName('');
                 setUsername('');
                 setEmail('');
@@ -132,7 +156,7 @@ export function SignupPage() {
                             />
                         </div>
 
-                        {/* Password Input */}
+                        {/* Password Input with Strength Meter */}
                         <div className="mb-6">
                             <PasswordInput
                                 value={password}
@@ -142,12 +166,60 @@ export function SignupPage() {
                                 disabled={signupLoading || loading}
                                 autoComplete="new-password"
                             />
+                            
+                            {/* Strength Meter UI */}
+                            {password && (
+                                <div className="mt-3 animate-in fade-in duration-300">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <div className="flex gap-1.5 flex-1 mr-4">
+                                            {[1, 2, 3, 4].map((level) => (
+                                                <div
+                                                    key={level}
+                                                    className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+                                                        strength >= level
+                                                            ? strength <= 2 
+                                                                ? 'bg-red-500' 
+                                                                : strength === 3 
+                                                                    ? 'bg-yellow-500' 
+                                                                    : 'bg-green-500'
+                                                            : 'bg-grey-800'
+                                                    }`}
+                                                />
+                                            ))}
+                                        </div>
+                                        <span className={`text-xs font-bold uppercase tracking-wider ${
+                                            strength <= 2 ? 'text-red-400' : strength === 3 ? 'text-yellow-400' : 'text-green-400'
+                                        }`}>
+                                            {strengthLabel}
+                                        </span>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                                        <div className={`text-[10px] flex items-center gap-1.5 ${password.length >= 8 ? 'text-green-400' : 'text-grey-600'}`}>
+                                            <div className={`w-1 h-1 rounded-full ${password.length >= 8 ? 'bg-green-400' : 'bg-grey-600'}`} />
+                                            8+ Characters
+                                        </div>
+                                        <div className={`text-[10px] flex items-center gap-1.5 ${/[A-Z]/.test(password) ? 'text-green-400' : 'text-grey-600'}`}>
+                                            <div className={`w-1 h-1 rounded-full ${/[A-Z]/.test(password) ? 'bg-green-400' : 'bg-grey-600'}`} />
+                                            Uppercase Letter
+                                        </div>
+                                        <div className={`text-[10px] flex items-center gap-1.5 ${/[0-9]/.test(password) ? 'text-green-400' : 'text-grey-600'}`}>
+                                            <div className={`w-1 h-1 rounded-full ${/[0-9]/.test(password) ? 'bg-green-400' : 'bg-grey-600'}`} />
+                                            Number
+                                        </div>
+                                        <div className={`text-[10px] flex items-center gap-1.5 ${/[^A-Za-z0-9]/.test(password) ? 'text-green-400' : 'text-grey-600'}`}>
+                                            <div className={`w-1 h-1 rounded-full ${/[^A-Za-z0-9]/.test(password) ? 'bg-green-400' : 'bg-grey-600'}`} />
+                                            Special Character
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Signup Button */}
                         <button
                             type="submit"
-                            disabled={signupLoading || loading}
+                            disabled={signupLoading || loading || (password.length > 0 && strength < 3)}
                             className="w-full bg-white hover:bg-grey-200 text-black font-bold py-3.5 px-4 rounded-lg mb-6 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                         >
                             {signupLoading ? (

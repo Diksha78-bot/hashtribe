@@ -27,8 +27,9 @@ export function CreatePost({ onSubmit }: CreatePostProps) {
     };
 
     return (
-        <div className="flex gap-4 p-4 border-b border-charcoal-800">
-            <div className="flex-shrink-0">
+        <div className="bg-charcoal-900/40 rounded-xl border border-charcoal-800 p-5 mb-6 backdrop-blur-sm">
+            <div className="flex gap-4">
+                <div className="flex-shrink-0">
                 <img
                     src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${user?.email}&background=random`}
                     alt={profile?.username || 'User'}
@@ -40,16 +41,16 @@ export function CreatePost({ onSubmit }: CreatePostProps) {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="What is happening in this protocol?"
-                    className="w-full bg-transparent text-white placeholder-grey-600 text-lg border-none focus:ring-0 p-0 resize-none min-h-[50px] font-sans"
+                    className="w-full bg-transparent text-white placeholder-grey-600 text-lg border-none focus:ring-0 p-0 resize-none min-h-[100px] focus:placeholder-grey-700 font-sans"
                     rows={2}
                 />
 
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-charcoal-800/50">
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-charcoal-700/60">
                     <div className="flex items-center gap-2 text-primary-500">
-                        <button className="p-2 rounded-full text-grey-400 hover:text-white hover:bg-charcoal-800 transition-colors">
+                        <button className="p-2 rounded-full text-grey-500 hover:text-grey-200 hover:bg-charcoal-700/50 transition-all duration-200">
                             <Image className="w-5 h-5" />
                         </button>
-                        <button className="p-2 rounded-full text-grey-400 hover:text-white hover:bg-charcoal-800 transition-colors">
+                        <button className="p-2 rounded-full text-grey-500 hover:text-grey-200 hover:bg-charcoal-700/50 transition-all duration-200">
                             <Smile className="w-5 h-5" />
                         </button>
                     </div>
@@ -60,12 +61,13 @@ export function CreatePost({ onSubmit }: CreatePostProps) {
                         className={clsx(
                             "px-4 py-1.5 rounded-full font-bold text-sm transition-all duration-200 flex items-center gap-2",
                             !content.trim() || isSubmitting
-                                ? "bg-charcoal-800 text-grey-500 cursor-not-allowed"
-                                : "bg-white text-black hover:bg-grey-200"
+                                ? "bg-charcoal-800 text-grey-500 cursor-not-allowed opacity-60"
+                                : "bg-white text-black hover:bg-grey-100 hover:shadow-md active:scale-95"
                         )}
                     >
                         {isSubmitting ? 'Posting...' : 'Post'}
                     </button>
+                </div>
                 </div>
             </div>
         </div>
